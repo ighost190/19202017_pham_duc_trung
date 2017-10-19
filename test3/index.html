@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+<head>
+	<title> SELECT HTML</title>
+	<link rel="stylesheet" type="text/css" href="http://getbootstrap.com/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+<div class="container">
+	<form method="post">
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				<label for="inputTp">Thanh Pho</label>
+				<select id="inputTp" class="form-control">
+					<option value="0">Choose</option>
+					<option value="1"> Ho Chi Minh </option>
+					<option value="2"> Ha Noi </option>
+				</select>
+			</div>
+			<div class="form-group col-md-4">
+				<label for="inputQuan">Quan</label>
+				<select id="inputQuan" class="form-control">
+					<option>Choose</option>
+				</select>
+			</div>
+			<div class="form-group col-md-4">
+				<label for="inputXa">Xa</label>
+				<select id="inputXa" class="form-control">
+					<option>Choose</option>
+				</select>
+			</div>
+		</div>
+	<form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+	function changeSelect(idChooseSl,idType,idChildSl)
+	{
+		var idType = idType;
+		var idChildSl = idChildSl;
+		var id = $("#"+idChooseSl).val();
+		if(idType==2 && id == 0){
+			location.reload();
+		}
+		$.ajax({
+			url:  "data.php",
+			type: "POST",
+			data: {idType:idType,idChildSl:idChildSl,id:id},
+			success:function(result)
+			{
+				dataRs = $.parseJSON(result);
+				var strHml = "";
+				$.each(dataRs,function(key,value)
+				{
+					strHml += '<option value="'+ key +'">'+ value +'</option>';
+				});
+				var dropdown=$('#'+idChildSl);
+                dropdown.empty();  
+				$("#"+idChildSl).append(strHml);
+			}
+		})
+		
+	}
+	$(document).ready(function() {
+		$("#inputTp").change(function(){
+			changeSelect('inputTp',2,'inputQuan');
+		});
+		$("#inputQuan").change(function(){
+			changeSelect('inputQuan',3,'inputXa');
+		});
+	});
+
+</script>
+</body>
+</html>
